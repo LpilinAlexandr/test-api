@@ -5,6 +5,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-%&ps$(ogl$n=3h(yj&l@!jry-gh)-vw^ghtjf2v-dd!uhhzc_='
+API_KEY = '123'
+API_AUTH_HEADER = 'X-API-KEY'
 
 DEBUG = True
 
@@ -27,6 +29,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'pet_api.middleware.ApiAuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'pet_project.urls'
