@@ -2,6 +2,8 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.utils.deprecation import MiddlewareMixin
 
+from .urls import app_name as api_app_name
+
 
 class HttpResponseUnauthorized(HttpResponse):
     """Custom API response for unauthorized requests."""
@@ -16,6 +18,8 @@ class ApiAuthenticationMiddleware(MiddlewareMixin):
     """API Key Authentication."""
 
     def process_request(self, request):
-        if not request.headers.get(settings.API_AUTH_HEADER) == settings.API_KEY:
+        # Если это запрос к API - обязательно проверяем авторизационный ключ
+        api_request = request.path.startswith(f'/{api_app_name}')
+        valid_key = request.headers.get(settings.API_AUTH_HEADER) == settings.API_KEY
+        if api_request and not valid_key:
             return HttpResponseUnauthorized()
-        return super().process_request(request)
