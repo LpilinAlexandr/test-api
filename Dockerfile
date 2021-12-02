@@ -3,9 +3,7 @@ FROM python
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-python3-dev \
-python3-pip
+RUN apt-get update && apt-get install -y --no-install-recommends python3-dev python3-pip gcc musl-dev
 
 WORKDIR test-api
 

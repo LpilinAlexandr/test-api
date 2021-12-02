@@ -12,15 +12,6 @@ from . import forms as api_forms
 from . import models as api_models
 
 
-class BasicResponseError(JsonResponse):
-    """Дефолтный ответ в случае некорректного запроса."""
-    status_code = 400
-    default_content = {'errors': 'Invalid params.'}
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(data=self.default_content, *args, **kwargs)
-
-
 @method_decorator(csrf_exempt, name='dispatch')
 @method_decorator(atomic, name='dispatch')
 class PetView(View):
@@ -39,7 +30,7 @@ class PetView(View):
             }
             return JsonResponse(response)
 
-        return BasicResponseError()
+        return JsonResponse({'errors': 'Invalid params.'}, status=400)
 
     def post(self, request):
         """Создать питомца."""
@@ -58,7 +49,7 @@ class PetView(View):
                 })
 
         error_text = f'Parameters are missing or passed incorrectly in the following fields: {[f for f in form.errors]}'
-        return BasicResponseError({'errors': error_text})
+        return JsonResponse({'errors': error_text}, status=400)
 
     def delete(self, request):
         """Удалить питомцев вместе с фотографиями."""
@@ -69,7 +60,7 @@ class PetView(View):
             delete_result = api_models.Pet.multi_delete(ids)
             return JsonResponse(delete_result)
 
-        return BasicResponseError()
+        return JsonResponse({'errors': 'Invalid params.'}, status=400)
 
     @staticmethod
     def get_data(request):
@@ -96,4 +87,4 @@ class PhotoUploadView(View):
                 'url': new_photo.get_full_url()
             })
 
-        return BasicResponseError()
+        return JsonResponse({'errors': 'Invalid params.'}, status=400)
