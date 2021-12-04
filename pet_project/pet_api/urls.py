@@ -9,6 +9,6 @@ urlpatterns = []
 urlpatterns.append(
     path('pets', include([
         path('', api.PetView.as_view()),
-        re_path(r'^/(?P<pet_id>\d+)/photo', api.PhotoUploadView.as_view()),
+        re_path(r'^/(?P<pet_id>[0-9a-f-]+)/photo$', api.PhotoUploadView.as_view()),
     ]))
 )

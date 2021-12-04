@@ -4,7 +4,7 @@ from . import models as api_models
 
 
 class PetForm(forms.ModelForm):
-    """Форма создания питомца."""
+    """Create the pet."""
 
     class Meta:
         model = api_models.Pet
@@ -12,7 +12,7 @@ class PetForm(forms.ModelForm):
 
 
 class PetListForm(forms.Form):
-    """Форма для валидации параметров для возврата списка питомцев."""
+    """Validation the params for getting pets list."""
 
     limit = forms.IntegerField(required=False)
     offset = forms.IntegerField(required=False)

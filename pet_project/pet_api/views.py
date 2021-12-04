@@ -15,12 +15,13 @@ from . import models as api_models
 @method_decorator(csrf_exempt, name='dispatch')
 @method_decorator(atomic, name='dispatch')
 class PetView(View):
+    """View for creating, uploading photo and deleting pets."""
 
     create_form = api_forms.PetForm
     list_form = api_forms.PetListForm
 
     def get(self, request):
-        """Получить список питомцев."""
+        """Get pets list."""
         form = self.list_form(request.GET)
         if form.is_valid():
             pet_query = api_models.Pet.objects.get_pet_list(**form.cleaned_data)
@@ -33,7 +34,7 @@ class PetView(View):
         return JsonResponse({'errors': 'Invalid params.'}, status=400)
 
     def post(self, request):
-        """Создать питомца."""
+        """Create pet."""
         data = self.get_data(request)
         form = self.create_form(data)
 
@@ -52,12 +53,11 @@ class PetView(View):
         return JsonResponse({'errors': error_text}, status=400)
 
     def delete(self, request):
-        """Удалить питомцев вместе с фотографиями."""
+        """Delete pets with photos."""
         data = self.get_data(request)
 
         if 'ids' in data and isinstance(data['ids'], list):
-            ids = [id for id in data['ids'] if isinstance(id, int)]
-            delete_result = api_models.Pet.multi_delete(ids)
+            delete_result = api_models.Pet.multi_delete(data['ids'])
             return JsonResponse(delete_result)
 
         return JsonResponse({'errors': 'Invalid params.'}, status=400)
@@ -73,15 +73,15 @@ class PetView(View):
 @method_decorator(csrf_exempt, name='dispatch')
 @method_decorator(atomic, name='dispatch')
 class PhotoUploadView(View):
-    """Загрузка фотографии питомца."""
+    """Upload pets photo."""
 
     def post(self, request, pet_id):
-        """Загрузить фото питомца."""
         pet = api_models.Pet.objects.filter(id=pet_id).first()
         if pet and request.body:
             image = ImageFile(io.BytesIO(request.body), name=pet.get_next_photo_name())
             new_photo = api_models.Photo.objects.create(file=image)
             pet.photos.add(new_photo)
+
             return JsonResponse({
                 'id': new_photo.id,
                 'url': new_photo.get_full_url()

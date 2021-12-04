@@ -19,11 +19,25 @@ services:
       - "db:database"
     restart: always
     container_name: website_django
-    command: python pet_project/manage.py runserver 0.0.0.0:8000
-    ports:
-      - "8000:8000"
+    command: bash -c "python pet_project/manage.py migrate 
+                      && gunicorn --bind 0.0.0.0:8000 pet_project.website.wsgi"
+    volumes:
+      - ./media:/test-api/pet_project/media/
+    expose:
+      - 8000
     env_file:
       - .env
+    depends_on:
+      - db
+  nginx:
+    build: ./nginx
+    container_name: nginx_django
+    ports:
+      - "80:80"
+    depends_on:
+      - website
+    volumes:
+      - ./media:/test-api/pet_project/media/
 
 volumes:
   postgres_volume:
