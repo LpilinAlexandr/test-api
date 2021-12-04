@@ -4,7 +4,7 @@ This is a test project. The project is a simple API, which was implemented on th
 
 ---
 
-#### 5 steps to check the project:
+#### 6 steps to check the project:
 
 1) Create project directory in your device.
 2) Git clone https://github.com/LpilinAlexandr/test-api.git
