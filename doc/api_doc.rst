@@ -5,7 +5,7 @@ Welcome pet-api documentation. Here is description all methods.
 
 API is using only http protocol. You need the secret key to work. His header is called "X-API-KEY". Value can be seen in the settings.py file :)
 
-Server address: ...
+Temporary server address: http://134.122.59.240
 
 API has 4 available methods
 ----------------
