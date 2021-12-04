@@ -14,3 +14,5 @@ This is a test project. The project is a simple API, which was implemented on th
 6) Enjoy API on address http://localhost:80
 
 BY THE WAY! For correctly work you need to .env file. You can try create it or text me :)
+
+Now you can try api at http://134.122.59.240
